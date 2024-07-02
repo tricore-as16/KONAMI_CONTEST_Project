@@ -1,5 +1,4 @@
-﻿#define _PLAYER_H_
-
+﻿#pragma once
 #include "DxLib.h"
 
 class Game;
@@ -16,6 +15,15 @@ class Player final
 {
 public:
     /// <summary>
+    /// アニメーションタイプ
+    /// </summary>
+    enum ANIMATION_TYPE
+    {
+        SITTEING,       // 座る
+        DELIGHTED,      // 喜ぶ
+    };
+
+    /// <summary>
     /// コンストラクタ
     /// </summary>
     Player();
@@ -26,9 +34,13 @@ public:
     ~Player();
 
     /// <summary>
-    /// プレイヤーの初期化
+    /// 初期化
     /// </summary>
-    void Initialize();
+    /// <param name="initializePosition">初期化座標</param>
+    /// <param name="rotationRate">初期化回転率</param>
+
+    void Initialize(VECTOR initializePosition, VECTOR rotationRate,
+        int attachIndex,VECTOR initializeScale);
 
     /// <summary>
     /// プレイヤーの更新
@@ -69,6 +81,15 @@ public:
     /// </summary>
     void DrawPlayerAssetModel();
 
+    /// <summary>
+    /// クリアシーンでの更新
+    /// </summary>
+    void UpdateClearScene();
+
+    /// <summary>
+    /// クリアシーンでの描画
+    /// </summary>
+    void DrawClearScene();
 
     // getter/setter
     const VECTOR& GetPos() const { return pos; }
@@ -77,7 +98,6 @@ public:
     const float GetRadius() { return r; }
     const VECTOR GetPlayerCushionOffSetPosition()const { return playerCushionOffsetPosition; }
 
-    void SetIsHitEnemy(const bool set) { isHitEnemy = set; }
     void SetIsHitGem(const bool set) { isHitGem = set; }
 
 private:
@@ -90,7 +110,7 @@ private:
     static constexpr int MOVE_LIMIT_Y = 820;                        // キャラのY座標の移動制限
     static constexpr float SPEED = 0.35f;                           // キャラの移動スピード
     static constexpr int MOVE_SIDE_LIMIT_MIN = -20;                 // 横の移動制限(カメラから見て左)
-    static constexpr int MOVE_SIDE_LIMIT_MAX = 2;                   // 横の移動制限(カメラから見て右)
+    static constexpr int MOVE_SIDE_LIMIT_MAX = -4;                  // 横の移動制限(カメラから見て右)
     static constexpr int ANIMATION_PLAYBUCK_SPEED = 2;              // アニメーションの再生時間
     static constexpr VECTOR LEFT_DIRECTION = { -1.0f,0.0f,0.0f };   // 左方向ディレクション
     static constexpr VECTOR RIGHT_DIRECTION = { 1.0f,0.0f,0.0f };   // 右方向ディレクション
@@ -113,14 +133,8 @@ private:
     float   fallSpeed;              // 落下速度
     float   speed;                  // 移動スピード
 
-    // フラグ
-    bool    isGround;               // プレイヤーが接地中か
-    bool    isHitTop;               // プレイヤーの頭が天井に当たっているか
-    bool    isGreatJump;            // ジャンプが成功したか
-
     // 当たり判定
     float   r;                      // 球型当たり判定の半径
-    bool    isHitEnemy;             // エネミーと接触したか
     bool    isHitGem;               // ジェムと接触したか
 
     // アニメーション関係

@@ -6,6 +6,7 @@ class GameScene;
 class ClearScene;
 class OverScene;
 class FPSSetting;
+class EffectManager;
 
 /// <summary>
 /// シーンマネージャー
@@ -62,27 +63,30 @@ public:
 private:
 
     // 実行用シーン
-    SceneBase* nowScene;    // 現在のシーン
-    SceneBase* nextScene;   // 次のシーン
+    SceneBase* nowScene;            // 現在のシーン
+    SceneBase* nextScene;           // 次のシーン
 
     // FPS処理
-    FPSSetting* fpsSetting; // FPS更新
+    FPSSetting* fpsSetting;         // FPS更新
+
+    // エフェクト
+    EffectManager* effectManager;   //エフェクト
 
     // ステート
-    int     sceneState;     // 現在のシーン
+    int     sceneState;             // 現在のシーン
 
     // 時間
-    int		previousTime;	// ゲームループが始まる前の時間
-    int		timer;			// ゲーム時間
-    float	nowTimer;		// 現在の制限時間
+    int     previousTime;           // ゲームループが始まる前の時間
+    int     timer;                  // ゲーム時間
+    float   nowTimer;               // 現在の制限時間
 
     // スコア
-    int     score;          // スコア
+    int     score;                  // スコア
 
     // キー入力
-    bool	keyOn;			// キー入力されているか
-    bool	keyRelease;		// キー入力が離れたか
-    bool	prevKeyOn;		// 前フレームでキー入力があったか
+    bool    keyOn;                  // キー入力されているか
+    bool    keyRelease;             // キー入力が離れたか
+    bool    prevKeyOn;              // 前フレームでキー入力があったか
 };
 
 

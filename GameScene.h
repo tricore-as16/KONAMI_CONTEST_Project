@@ -76,10 +76,15 @@ public:
     const bool GetIsNextScene() { return isNextScene; }
 
 private:
-    static constexpr int STATE_GAME_TIME_LIMIT = 40;    // ゲームステートが終了(する時間)(初期40)
+    // 定数
+    static constexpr int STATE_GAME_TIME_LIMIT = 4;    // ゲームステートが終了(する時間)(初期40)
     static constexpr int SCORE_MULTIPLE_RATE = 1500;    // スコア倍率
+    // ゲームシーンでの宝箱の初期化座標
+    static constexpr VECTOR TREASURE_CHEST_INITIALIZE_POSITION = { 5.0f,1.0f,-5.0f};
+    // ゲームシーンでの宝箱の初期回転率
+    static constexpr VECTOR TREASURE_CHEST_INITIALIZE_ROTATION_RATE = { 0.0f, 50.0f * DX_PI_F / 180.0f, 0.0f };
 
-    // インスタンス
+    // 変数
     Player*         player;
     TreasureChest*  treasureChest;
     GemManager*     gemManager;

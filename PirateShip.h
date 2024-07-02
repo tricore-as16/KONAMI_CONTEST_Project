@@ -29,7 +29,7 @@ public:
 
 private:
     // 定数
-    static constexpr int PIRATE_SHIP_BURNS_SMALL_EFFECT_CYCLE = 60;     // 海賊船が燃えるエフェクト(中)を再生する周期
+    static constexpr int PIRATE_SHIP_BURNS_SMALL_EFFECT_CYCLE = 140;    // 海賊船が燃えるエフェクト(中)を再生する周期
     static constexpr int THUNDER_EFFECT_CYCLE = 300;                    // 雷のエフェクトを再生する周期
     static constexpr int THUNDER_EFFECT_POSITION_X_OFFSET = 30;         // 雷のエフェクトを再生する位置のX軸ずらし量
     static constexpr int THUNDER_EFFECT_RANDOM_RANGE = 25;              // 雷のエフェクトを再生するX軸の乱数の範囲

@@ -74,8 +74,7 @@ void GameScene::Initialize()
     gemManager->SetGemWaveState(GemManager::WAVE_FIRST);
 
     // 各シーン初期関数呼び出し
-    player->Initialize();
-    treasureChest->Initialize();
+    treasureChest->Initialize(TREASURE_CHEST_INITIALIZE_POSITION, TREASURE_CHEST_INITIALIZE_ROTATION_RATE);
     gemManager->Initialize();
     gameSceneUI->Initialize();
 }
@@ -85,41 +84,6 @@ void GameScene::Initialize()
 /// </summary>
 void GameScene::Update()
 {
-    // ゲームが開始してからの時間を計測
-    SettingTimer(*gemManager);
-
-    // ゲームアップデート
-    // 当たり判定処理
-    isScoreUp = gemManager->IsCollisionGem(*player, *treasureChest, *collision);
-    if (isScoreUp)
-    {
-        // 当たった時の演出を出す指令をセット
-        gameSceneUI->SetIsHitGemToChest(true);
-
-        // スコアをアップさせる
-        UpdateScore(*treasureChest);
-    }
-    // 更新
-    player->Update();	                    // プレイヤー
-    skyDome->Update();		                // 背景
-    gemManager->UpdateWaveGem(nowTimer);    // 宝石
-    treasureChest->Update();                // 宝箱
-    stageObjectSet->Update();               // ステージ
-    skyDome->Update();                      // スカイドーム
-    gameSceneUI->Update(nowTimer,           // UI
-        gemManager->waveConstantsTable[(GemManager::WAVE_STATE)gemManager->GetGemWaveState()]->waveEndTime);
-    camera->Update();                       // カメラ
-    effectManager->Update();                // エフェクト
-    // データのリセットフラグがたったら宝石のデータをリセットさせる
-    gemManager->ResetGemData();
-
-    // 終了時間になったらSCENE_CLEARに移行
-    if (nowTimer >= STATE_GAME_TIME_LIMIT)
-    {
-        isNextScene = true;
-    }
-
-    //EffectManager->Update();
 }
 
 /// <summary>
@@ -197,7 +161,6 @@ void GameScene::Draw()
     player->Draw();             // プレイヤー
     treasureChest->Draw();      // 宝箱
     skyDome->Draw();            // スカイドーム
-    DrawEffekseer3D();          // 3Dエフェクト描画
     player->Draw();             // プレイヤー
     gemManager->DrawGems();     // 宝石たち
     treasureChest->Draw();      // 宝箱

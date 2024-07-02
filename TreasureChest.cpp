@@ -19,8 +19,8 @@ TreasureChest::TreasureChest()
     pos = VGet(5, 1, -5);
     scale = VGet(0.012f, 0.012f, 0.012f);
     radius = 3.0f;
-    // モデルの回転(違和感ない位置に修正)
-    MV1SetRotationXYZ(modelHanlde, VGet(0.0f, 50.0f * DX_PI_F / 180.0f, 0.0f));
+    // スケールの設定
+    MV1SetScale(modelHanlde, scale);
 }
 
 /// <summary>
@@ -35,10 +35,13 @@ TreasureChest::~TreasureChest()
 /// <summary>
 /// 初期化
 /// </summary>
-void TreasureChest::Initialize()
+/// <param name="initializePosition">初期化座標</param>
+/// <param name="rotationRate">初期化回転率</param>
+void TreasureChest::Initialize(VECTOR initializePosition,VECTOR rotationRate)
 {
-    // スケールの設定
-    MV1SetScale(modelHanlde, scale);
+    pos = initializePosition;
+    // モデルの回転(違和感ない位置に修正)
+    MV1SetRotationXYZ(modelHanlde, rotationRate);
 }
 
 /// <summary>

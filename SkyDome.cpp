@@ -10,6 +10,7 @@ SkyDome::SkyDome()
     , w                 (0)
     , h                 (0)
     , scale             (VGet(0.1,0.1,0.1))
+    , rotationRateCount (0)
 {
     modelHandle = MV1LoadModel("data/model/skyDome/skyDome.mv1");
     MV1SetScale(modelHandle, VGet(0.4f, 0.4f, 0.4f));
@@ -54,6 +55,9 @@ void SkyDome::Initialize()
 /// </summary>
 void SkyDome::Update()
 {
+    // 回転アニメーション再生
+    PlayRotateAnimation();
+
     // 3Dモデルのポジションを設定
     MV1SetPosition(modelHandle,pos);
 }
@@ -67,4 +71,16 @@ void SkyDome::Draw()
     MV1DrawModel(modelHandle);
 }
 
+/// <summary>
+/// 回転アニメーション再生
+/// </summary>
+void SkyDome::PlayRotateAnimation()
+{
+    // 回転用カウント
+    rotationRateCount++;
+
+    // 回転量を計算
+    float _volume = (rotationRateCount * DX_PI_F / 180.0f) / ROTATION_SPEED;
+    MV1SetRotationXYZ(modelHandle, VGet(0, _volume, 0));
+}
 

@@ -21,6 +21,15 @@ BoatWithChest::~BoatWithChest()
 }
 
 /// <summary>
+/// 初期化
+/// </summary>
+/// <param name="initializePosition">初期化する座標</param>
+void BoatWithChest::Initialize(VECTOR initializePosition)
+{
+    position = initializePosition;
+}
+
+/// <summary>
 /// 更新
 /// </summary>
 void BoatWithChest::Update()

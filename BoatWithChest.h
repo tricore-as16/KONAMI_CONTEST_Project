@@ -18,6 +18,12 @@ public:
     ~BoatWithChest();
 
     /// <summary>
+    /// 初期化
+    /// </summary>
+    /// <param name="initializePosition">初期化する座標</param>
+    void Initialize(VECTOR initializePosition);
+
+    /// <summary>
     /// 更新
     /// </summary>
     void Update() override;

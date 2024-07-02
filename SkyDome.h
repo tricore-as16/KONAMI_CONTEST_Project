@@ -33,6 +33,11 @@ public:
     /// </summary>
     void Draw();
 
+    /// <summary>
+    /// 回転アニメーションン再生
+    /// </summary>
+    void PlayRotateAnimation();
+
     // モデルハンドルの取得
     int GetModelHandle() { return modelHandle; }
 
@@ -44,16 +49,17 @@ public:
 
 private:
     // 定数
-    const float SPEED = 5.0f;
+    static constexpr int ROTATION_SPEED = 100;      // 回転速度
 
-    int     modelHandle;    // モデルハンドル
-    int     textureHandle;  // テクスチャハンドル
-    VECTOR  pos;            // ポジション
-    VECTOR  dir;            // 方向
-    VECTOR  scale;          // 拡大率
-    int     w;              // 幅
-    int     h;              // 高さ
-
+    // 変数
+    int     modelHandle;        // モデルハンドル
+    int     textureHandle;      // テクスチャハンドル
+    VECTOR  pos;                // ポジション
+    VECTOR  dir;                // 方向
+    VECTOR  scale;              // 拡大率
+    int     w;                  // 幅
+    int     h;                  // 高さ
+    int     rotationRateCount;  // 回転させるためのカウント
 };
 
 

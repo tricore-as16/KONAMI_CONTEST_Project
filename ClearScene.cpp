@@ -2,7 +2,6 @@
 #include "ClearScene.h"
 #include "MenuScene.h"
 #include "SceneBase.h"
-#include "Room.h"
 #include "TreasureChest.h"
 #include "Camera.h"
 #include "Collision.h"
@@ -11,22 +10,27 @@
 #include "GemManager.h"
 #include "Player.h"
 #include "GameScene.h"
-#include "Calculation.h"
+#include "BoatWithChest.h"
+#include "sea.h"
+#include "Player.h"
+#include "EffectManager.h"
 
 /// <summary>
 /// コンストラクタ
 /// </summary>
 ClearScene::ClearScene(int _score, int _highScore)
 {
-    score = _score;
-    highScore = _highScore;
-    clearSceneUI = new ClearSceneUI();
-    treasureChest = new TreasureChest();
-    gemManager = new GemManager();
-    collision = new Collision();
-    camera = new Camera();
-    skyDome = new SkyDome();
-    room = new Room();
+    score           = _score;
+    highScore       = _highScore;
+    clearSceneUI    = new ClearSceneUI();
+    treasureChest   = new TreasureChest();
+    gemManager      = new GemManager();
+    camera          = new Camera();
+    skyDome         = new SkyDome();
+    boatWithChest   = new BoatWithChest();
+    sea             = new Sea();
+    player          = new Player();
+    effectManager   = EffectManager::GetInstance();
 }
 
 /// <summary>
@@ -37,10 +41,11 @@ ClearScene::~ClearScene()
     delete(clearSceneUI);
     delete(treasureChest);
     delete(gemManager);
-    delete(collision);
     delete(camera);
     delete(skyDome);
-    delete(room);
+    delete(boatWithChest);
+    delete(sea);
+    delete(player);
 }
 
 /// <summary>
@@ -48,10 +53,14 @@ ClearScene::~ClearScene()
 /// </summary>
 void ClearScene::Initialize()
 {
-    treasureChest->Initialize();
+    treasureChest->Initialize(TREASURE_CHEST_INITIALIZE_POSITION,
+                              TREASURE_CHEST_INITIALIZE_ROTATION_RATE);
     gemManager->Initialize();
-    skyDome->Initialize();
-    room->Initialize();
+    boatWithChest->Initialize(BOAT_WITH_CHEST_INITIALIZE_POSITION);
+    player->Initialize(PLAYER_INITILIZE_POSITION,
+                       PLAYER_INITILIZE_ROTATION_RATE,
+                       Player::ANIMATION_TYPE::DELIGHTED,
+                       PLAYER_INITILIZE_SCALE);
 }
 
 /// <summary>
@@ -59,8 +68,7 @@ void ClearScene::Initialize()
 /// </summary>
 void ClearScene::Update()
 {
-    treasureChest->Update();
-    room->Update();
+    treasureChest->Update();    // 宝箱
 }
 
 /// <summary>
@@ -80,8 +88,14 @@ SceneBase* ClearScene::UpdateScene()
     }
 
     // 更新処理
-    treasureChest->Update();
-    room->Update();
+    camera->Update();           // カメラ
+    treasureChest->Update();    // 宝箱
+    skyDome->Update();          // スカイドーム
+    boatWithChest->Update();    // 宝箱を乗せる船
+    sea->UpdateClearScene();    // 海
+    player->UpdateClearScene(); // プレイヤー
+    effectManager->Update();    // エフェクトマネージャー
+    UpdateEffekseer3D();        // エフェクト更新
 
     // スペースキーが押されたらフェードアウトしてメニューへ
     if (CheckHitKey(KEY_INPUT_SPACE) == 1 || GetJoypadInputState(DX_INPUT_KEY_PAD1))
@@ -108,8 +122,12 @@ SceneBase* ClearScene::UpdateScene()
 void ClearScene::Draw()
 {
     // オブジェクト描画
-    treasureChest->Draw();
-    room->Draw();
+    treasureChest->Draw();      // 宝箱
+    skyDome->Draw();            // スカイドーム
+    boatWithChest->Draw();      // 宝石を乗せる船
+    sea->Draw();                // 海
+    player->DrawClearScene();   // プレイヤー
+    DrawEffekseer3D();          // 3Dエフェクト描画
 
     // UI描画
     DrawUI();

@@ -10,30 +10,27 @@
 /// コンストラクタ
 /// </summary>
 Player::Player()
-    :   isGreatJump             (false)
-    ,   isGround                (false)
-    ,   isHitEnemy              (false)
-    ,   isHitTop                (false)
-    ,   isHitGem                (false)
+    :   isHitGem                (false)
     ,   speed                   (5)
     ,   r                       (1)
     ,   width                   (HIT_BOX_WIDTH)
     ,   height                  (HIT_BOX_HEIGHT)
     ,   collisionGraph          (-1)
     ,   animationPlayTime       (0)
+    ,   fallSpeed               (0.0f)
+    ,   pos                     (VGet(-18, 0, -5))
+    ,   dir                     (VGet(0, 0, 0))
+    ,   scale                   (VGet(0.02f, 0.02f, 0.02f))
+    ,   rotationRate            (VGet(0.0f, -90.0f * DX_PI_F / 180.0f, 0.0f))
 {
     effectManager = EffectManager::GetInstance();
-    modelHandle = MV1LoadModel("data/model/player/SittingPlayer.mv1");
-    animationAttachIndex = MV1AttachAnim(modelHandle, 0, -1, false);
+    modelHandle = MV1LoadModel("data/model/player/PlayerModle.mv1");
+    animationAttachIndex = MV1AttachAnim(modelHandle, SITTEING, -1, false);
     animationPlayTotalTime = MV1GetAttachAnimTotalTime(modelHandle, animationAttachIndex);
     collisionGraph = LoadGraph("data/texture/Debug/TestHitGraph100x100Red.png");
-    pos = VGet(-18, 1, -5);
-    dir = VGet(0,0,0);
-    fallSpeed = 0.0f;
-    rotationRate = VGet(0.0f, -90.0f * DX_PI_F / 180.0f, 0.0f);
     MV1SetRotationXYZ(modelHandle, rotationRate);
-    scale = VGet(0.02f, 0.02f, 0.02f);
     MV1SetScale(modelHandle, scale);
+
     // プレイヤー装備品
     playerOar = new PlayerOar();
     playerBoat = new PlayerBoat();
@@ -55,17 +52,17 @@ Player::~Player()
 /// <summary>
 /// 初期化
 /// </summary>
-void Player::Initialize()
+void Player::Initialize(VECTOR initializePosition, VECTOR rotationRate,
+    int attachIndex, VECTOR initializeScale)
 {
-    pos = VGet(-18, 0, -5); // 座標のセット
-    dir = VGet(0, 0, 0);    // 方向のセット
-    fallSpeed = 0.0f;       // 落下速度
-    isGround = false;       // 地面にいるか
-    isHitTop = false;       // 頭が当たっているか
-    isHitEnemy = false;     // エネミーと接触したか
-    isHitGem = false;       // ジェムとの当たり判定
-    isGreatJump = false;    // よいジャンプ判定
-    speed = 1;              // 移動スピード
+    // 座標設定
+    pos = initializePosition;
+    // モデルの回転(違和感ない位置に修正)
+    MV1SetRotationXYZ(modelHandle, rotationRate);
+    // アニメーションのアタッチ
+    animationAttachIndex = MV1AttachAnim(modelHandle, DELIGHTED, -1, false);
+    // スケールの設定
+    MV1SetScale(modelHandle, initializeScale);
 }
 
 /// <summary>
@@ -210,4 +207,24 @@ void Player::DrawPlayerAssetModel()
     playerOar->Draw();      // オール
     playerBoat->Draw();     // ボート
     playerCushion->Draw();  // クッション
+}
+
+/// <summary>
+/// クリアシーンでの更新
+/// </summary>
+void Player::UpdateClearScene()
+{
+    // アニメーション更新
+    UpdateAnimation();
+
+    // 座標の更新
+    MV1SetPosition(modelHandle, pos);
+}
+
+/// <summary>
+/// クリアシーンでの描画
+/// </summary>
+void Player::DrawClearScene()
+{
+    MV1DrawModel(modelHandle);
 }

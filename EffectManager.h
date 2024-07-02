@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <iostream>
 #include <vector>
-
+#include "EffekseerForDXLib.h"
 
 /// <summary>
 /// エフェクトマネージャー
@@ -9,6 +9,15 @@
 class EffectManager
 {
 public:
+    /// <summary>
+    /// 再生状態
+    /// </summary>
+    enum PLAY_STATE
+    {
+        NO_PLAY = -1,   // 再生されていない
+        PLAY,           // 再生中
+    };
+
 	/// <summary>
 	/// デストラクタ
 	/// </summary>
@@ -34,6 +43,11 @@ public:
     /// エフェクトの読み込み
     /// </summary>
     void LoadEffect();
+
+    /// <summary>
+    /// 初期化
+    /// </summary>
+    void Initialize();
 
     /// <summary>
     /// 更新
@@ -88,6 +102,12 @@ public:
     /// <param name="playPosition"></param>
     void PlayThunderEffect(VECTOR playPosition);
 
+    /// <summary>
+    /// 花火のエフェクト再生
+    /// </summary>
+    /// <param name="playPosition"></param>
+    void PlayFireWorksEffect(VECTOR playPosition);
+
 private:
 	/// <summary>
 	/// コンストラクタ
@@ -100,6 +120,7 @@ private:
     std::vector<int> playingList;           // 現在再生中のリスト
 
     // ハンドル
+    //                  ゲームシーン                  //
     // 宝石とプレイヤー
     int     playerHitEffect;    // プレイヤーと宝石のヒット時
     // 宝石と宝箱
@@ -111,5 +132,8 @@ private:
     int     pirateShipExplosionEffect;      // 海賊船が爆発するエフェクト
     int     pirateShipBigExplosionEffect;   // 海賊船が大爆発するエフェクト
     int     thunderEffect;                  // 雷が落ちるエフェクト
+
+    //                  クリアシーン                  //
+    int fireWorksEffect;                    // 花火のエフェクト
 };
 

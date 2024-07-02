@@ -27,6 +27,8 @@ Game::Game()
     nextScene = NULL;
     // FPS
     fpsSetting = new FPSSetting();
+    // エフェクト
+    effectManager = EffectManager::GetInstance();
 }
 
 /// <summary>
@@ -81,6 +83,7 @@ void Game::ChangeScene()
 
     // 初期関数を呼ぶ
     nowScene->Initialize();
+    effectManager->Initialize();
 
     // 次のシーンを初期化
     nextScene = NULL;

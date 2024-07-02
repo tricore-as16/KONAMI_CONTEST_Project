@@ -53,8 +53,6 @@ EffectManager::EffectManager()
 EffectManager::~EffectManager()
 {
 	// エフェクトリソースを削除する。(Effekseer終了時に破棄されるので削除しなくてもいい)
-	DeleteEffekseerEffect(gemGetEffect);
-	DeleteEffekseerEffect(playerHitEffect);
 }
 
 /// <summary>
@@ -70,6 +68,7 @@ void EffectManager::LoadEffect()
     pirateShipExplosionEffect = LoadEffekseerEffect("data/effect/GameScene/Explosion.efk", 1.0f);
     pirateShipBigExplosionEffect = LoadEffekseerEffect("data/effect/GameScene/BigExplosion.efk", 0.3f);
     thunderEffect = LoadEffekseerEffect("data/effect/GameScene/ThunderLOD50.efk", 1.0f);
+    fireWorksEffect = LoadEffekseerEffect("data/effect/FireWorks/FireWorks.efk", 1.0f);
 }
 
 /// <summary>
@@ -101,6 +100,23 @@ void EffectManager::DeleteInstance()
 }
 
 /// <summary>
+/// 初期化
+/// </summary>
+void EffectManager::Initialize()
+{
+    //// 再生中のエフェクトを削除する
+    for (int i = playingList.size() - 1; i >= 0; i--)
+    {
+        // 再生中か調べる
+        if (!IsEffekseer3DEffectPlaying(playingList[i]))
+        {
+            StopEffekseer3DEffect(playingList[i]);      // 停止
+            playingList.erase(playingList.begin() + i); // 削除
+        }
+    }
+}
+
+/// <summary>
 /// 更新
 /// </summary>
 void EffectManager::Update()
@@ -108,7 +124,8 @@ void EffectManager::Update()
     // エフェクトが終了したら、再生中から削除する
     for (int i = 0; i < playingList.size(); i++)
     {
-        if (IsEffekseer3DEffectPlaying(playingList[i]) == -1)
+        // 再生中か調べる
+        if (IsEffekseer3DEffectPlaying(playingList[i]) == NO_PLAY)
         {
             playingList.erase(playingList.begin());
         }
@@ -199,6 +216,16 @@ void EffectManager::PlayPirateShipBigExplosionEffect(VECTOR playPosition)
 void EffectManager::PlayThunderEffect(VECTOR playPosition)
 {
     playingEffectHandle = PlayEffekseer3DEffect(thunderEffect);
+    playingList.push_back(playingEffectHandle);
+    SetPosPlayingEffekseer3DEffect(playingEffectHandle, playPosition.x, playPosition.y, playPosition.z);
+}
+
+/// <summary>
+/// 花火のエフェクト再生
+/// </summary>
+void EffectManager::PlayFireWorksEffect(VECTOR playPosition)
+{
+    playingEffectHandle = PlayEffekseer3DEffect(fireWorksEffect);
     playingList.push_back(playingEffectHandle);
     SetPosPlayingEffekseer3DEffect(playingEffectHandle, playPosition.x, playPosition.y, playPosition.z);
 }

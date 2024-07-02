@@ -22,7 +22,9 @@ public:
     /// <summary>
     /// 初期化
     /// </summary>
-    void Initialize();
+    /// <param name="initializePosition">初期化座標</param>
+    /// <param name="rotationRate">初期化回転率</param>
+    void Initialize(VECTOR initializePosition, VECTOR rotationRate);
 
     /// <summary>
     /// 更新
